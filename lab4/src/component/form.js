@@ -1,19 +1,18 @@
-import React from 'react'
-
-import { useForm } from "react-hook-form"
+import React,{useRef} from 'react'
+import Select from 'react-select';
+import { useForm, Controller } from "react-hook-form"
 import './form.css'
 
 const RegistrationForm = () => {
 
-
+    const selectInputRef = useRef()
 
     const {
 
+        control,
         register,
 
         handleSubmit,
-
-        watch,
 
         formState: { errors },
 
@@ -24,18 +23,27 @@ const RegistrationForm = () => {
     const onSubmit = (data) => {
 
         console.log(data)
-
+        alert('Login Succesful!!!')
+        document.querySelector('[name="first_name"]').value = '';
+        document.querySelector('[name="last_name"]').value = '';
+        document.querySelector('[name="email"]').value = '';
+        document.querySelector('[name="contact"]').value = null;
+        selectInputRef.current.clearValue()
     }
 
 
-
+    const options = [
+        { value: 'btech', label: 'B-Tech' },
+        { value: 'mtech', label: 'M-Tech' },
+        { value: 'bca', label: 'BCA' },
+    ];
 
 
     return (
 
         <div className='container'>
 
-            <h1>Registration Form </h1>
+            <h1>User Registration Form </h1>
 
             <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -104,7 +112,25 @@ const RegistrationForm = () => {
                     {errors.contact && <span>Contact is Required</span>}
 
                 </div>
-
+                <div className='cont'>
+                    <Controller
+                        control={control}
+                        rules={{
+                            maxLength: 100,
+                            required: true 
+                        }}
+                        render={({ field }) => (
+                            <Select
+                                {...field}
+                                isMulti
+                                options={options}
+                                ref={selectInputRef}
+                            />
+                        )}
+                        name="options"  
+                    />
+                    {errors.options && <span>Select One option</span>}
+                </div>
                 <div className='cont'>
 
                     <button type="submit">
@@ -127,4 +153,4 @@ const RegistrationForm = () => {
 
 
 
-export default RegistrationForm;
+export default RegistrationForm
